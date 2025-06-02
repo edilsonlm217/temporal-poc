@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TemporalController } from './workflows/temporal.controller';
+import { TemporalController } from './temporal.controller';
 import { TemporalService } from './temporal.service';
 
 @Module({
