@@ -31,7 +31,7 @@ services:
     depends_on:
       - temporal
     ports:
-      - "8233:8233" # UI
+      - "8233:8080" # UI
 
 volumes:
   postgres_data:
