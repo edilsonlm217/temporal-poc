@@ -8,7 +8,6 @@ export enum TargetType {
 export enum RequestedDataType {
   CDR = 'CDR',
   IPDR = 'IPDR',
-  CADASTRAL = 'CADASTRAL',
   // Pode expandir futuramente
 }
 
