@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TemporalModule } from './temporal/temporal.module';
+import { DataSecrecyModule } from './data-secrecy/data-secrecy.module';
 
 @Module({
-  imports: [TemporalModule],
+  imports: [DataSecrecyModule],
   controllers: [AppController],
   providers: [AppService],
 })
