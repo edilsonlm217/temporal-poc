@@ -8,18 +8,43 @@ import {
   RequestedDataType
 } from '../../common/interfaces/data-secrecy.interface';
 
-const { fetchCDRActivity } = proxyActivities<typeof cdr>({ startToCloseTimeout: '30 minutes' });
-const { fetchIPDRActivity } = proxyActivities<typeof ipdr>({ startToCloseTimeout: '30 minutes' });
+const { fetchCDRActivity } = proxyActivities<typeof cdr>({
+  startToCloseTimeout: '30 minutes',
+  retry: {
+    maximumAttempts: 3,
+    initialInterval: '2s',
+    backoffCoefficient: 2,
+  }
+});
+
+const { fetchIPDRActivity } = proxyActivities<typeof ipdr>({
+  startToCloseTimeout: '30 minutes',
+  retry: {
+    maximumAttempts: 3,
+    initialInterval: '2s',
+    backoffCoefficient: 2,
+  }
+});
 
 export async function dataSecrecyWorkflow(request: DataSecrecyRequestDto) {
   const results: Record<string, string[]> = {};
 
   if (request.requestedData.includes(RequestedDataType.CDR)) {
-    results.CDR = await fetchCDRActivity(request);
+    try {
+      results.CDR = await fetchCDRActivity(request);
+    } catch (err) {
+      // Tratar o erro: log, fallback, retorno vazio, etc.
+      results.CDR = ['error'];
+    }
+
   }
 
   if (request.requestedData.includes(RequestedDataType.IPDR)) {
-    results.IPDR = await fetchIPDRActivity(request);
+    try {
+      results.IPDR = await fetchIPDRActivity(request);
+    } catch (error) {
+      results.IPDR = ['error']
+    }
   }
 
   return results;
