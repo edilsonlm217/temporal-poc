@@ -6,5 +6,6 @@ import { DataSecrecyService } from './data-secrecy.service';
   imports: [],
   controllers: [DataSecrecyController],
   providers: [DataSecrecyService],
+  exports: [DataSecrecyService]
 })
 export class DataSecrecyModule { }

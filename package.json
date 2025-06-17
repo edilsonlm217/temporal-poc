@@ -25,6 +25,7 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "@temporalio/activity": "^1.11.8",
     "@temporalio/client": "^1.11.8",
     "@temporalio/worker": "^1.11.8",
     "@temporalio/workflow": "^1.11.8",

@@ -1,22 +1,30 @@
 import { Period } from 'src/common/interfaces/data-secrecy.interface';
 
 export class IpdrApiService {
-  async fetchIPDR(ips: string[], period: Period): Promise<string[]> {
-    console.log(`🔎 [IPDR] Consultando IPDR para IPs: ${ips.join(', ')}`);
+  async dispatchRequestToMicroservice(params: {
+    ips: string[];
+    period: Period;
+    taskToken: string; // base64
+  }): Promise<void> {
+    const { ips, period, taskToken } = params;
 
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const shouldFail = Math.random() < 0.5;
+    console.log(`🔄 [IPDR] Disparando request para microserviço IPDR`);
+    console.log(`📨 IPs: ${ips.join(', ')}`);
+    console.log(`📅 Período: ${period.from} até ${period.to}`);
+    console.log(`🪪 TaskToken: ${taskToken.slice(0, 10)}...`);
 
-        if (shouldFail) {
-          console.error('❌ [IPDR] Falha simulada na consulta!');
-          return reject(new Error('IPDR API simulated failure'));
-        }
+    // Simulação de comunicação assíncrona com o microserviço:
+    setTimeout(() => {
+      const shouldFail = Math.random() < 0.5;
 
-        const results = ips.map(ip => `IPDR data for ${ip} from ${period.from} to ${period.to}`);
-        console.log('✅ [IPDR] Consulta bem-sucedida');
-        resolve(results);
-      }, 1500);
-    });
+      if (shouldFail) {
+        console.error('❌ [IPDR] Falha simulada na entrega ao microserviço!');
+        // Aqui você não rejeita: apenas loga. O erro real será simulado via webhook
+        return;
+      }
+
+      console.log('📬 [IPDR] Request entregue com sucesso ao microserviço (mock)');
+      // Nesse cenário real, o microserviço chamaria o webhook posteriormente
+    }, 1500);
   }
 }

@@ -2,6 +2,7 @@ import { log } from '@meta-commons/ts-log';
 import { Injectable } from '@nestjs/common';
 import { Client, Connection } from '@temporalio/client';
 import { DataSecrecyRequestDto } from 'src/common/interfaces/data-secrecy.interface';
+import { IpdrWebhookPayload } from 'src/webhooks/ipdr-webhook/interfaces/ipdr-webhook-payload.interface';
 
 @Injectable()
 export class DataSecrecyService {
@@ -46,5 +47,12 @@ export class DataSecrecyService {
       taskQueue: 'data-secrecy-task-queue',
       workflowId: 'data-secrecy-workflow-' + Date.now(),
     });
+  }
+
+  @log()
+  async completeActivityFromIpdrWebhook(taskToken: string, result: any) {
+    if (!this.client) throw new Error('Temporal client not initialized.');
+    const taskTokenUint8 = Buffer.from(taskToken, 'base64');
+    await this.client.activity.complete(taskTokenUint8, result);
   }
 }
