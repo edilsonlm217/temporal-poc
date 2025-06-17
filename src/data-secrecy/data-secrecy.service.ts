@@ -1,3 +1,4 @@
+import { log } from '@meta-commons/ts-log';
 import { Injectable } from '@nestjs/common';
 import { Client, Connection } from '@temporalio/client';
 import { DataSecrecyRequestDto } from 'src/common/interfaces/data-secrecy.interface';
@@ -13,6 +14,7 @@ export class DataSecrecyService {
     this.client = new Client({ connection });
   }
 
+  @log()
   async enqueueRequest(payload: DataSecrecyRequestDto) {
     this.queue.push(payload);
     console.log('Request added to queue:', payload.requestId);
@@ -21,6 +23,7 @@ export class DataSecrecyService {
     this.processQueue();
   }
 
+  @log()
   private async processQueue() {
     while (this.queue.length > 0) {
       const request = this.queue.shift();
@@ -35,6 +38,7 @@ export class DataSecrecyService {
     }
   }
 
+  @log()
   async startDataSecrecyWorkflow(request: DataSecrecyRequestDto) {
     if (!this.client) throw new Error('Temporal client not initialized.');
     const handle = await this.client.workflow.start('dataSecrecyWorkflow', {
@@ -42,6 +46,5 @@ export class DataSecrecyService {
       taskQueue: 'data-secrecy-task-queue',
       workflowId: 'data-secrecy-workflow-' + Date.now(),
     });
-    return handle.result();
   }
 }
